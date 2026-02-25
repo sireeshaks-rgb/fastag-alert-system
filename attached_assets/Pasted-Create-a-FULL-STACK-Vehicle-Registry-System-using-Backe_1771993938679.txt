@@ -1,0 +1,134 @@
+Create a FULL STACK Vehicle Registry System using:
+
+Backend:
+- Node.js
+- Express.js
+- PostgreSQL (use a cloud database like Neon or Supabase, do NOT require local installation)
+- Use pg library for PostgreSQL connection
+- Use dotenv for environment variables
+- Enable CORS
+- Use REST API structure
+
+Frontend:
+- React (use Vite)
+- Axios for API calls
+- Modern clean UI using simple CSS (no Tailwind required)
+- Expandable vehicle cards
+
+========================================
+FEATURE REQUIREMENTS
+========================================
+
+1) VEHICLE FIELDS:
+- id (auto generated)
+- vehicleNumber (unique)
+- ownerName
+- model
+- mileage
+- fastagBalance
+- lastServiceDate
+- createdAt
+
+========================================
+BACKEND REQUIREMENTS
+========================================
+
+Create REST API endpoints:
+
+POST   /api/vehicles
+GET    /api/vehicles
+GET    /api/vehicles/:id
+PUT    /api/vehicles/:id
+DELETE /api/vehicles/:id
+POST   /api/vehicles/:id/recharge
+
+Functional details:
+
+1. CREATE vehicle
+   - Prevent duplicate vehicleNumber
+   - fastagBalance default = 0
+
+2. GET vehicles
+   - Support search query:
+     /api/vehicles?search=ABC
+
+3. UPDATE vehicle
+   - Allow editing ownerName, model, mileage, fastagBalance, lastServiceDate
+
+4. DELETE vehicle
+   - Remove entry safely
+
+5. RECHARGE FASTAG
+   - Add amount to fastagBalance
+   - Return updated balance
+
+Add proper error handling and status codes.
+
+========================================
+FRONTEND REQUIREMENTS
+========================================
+
+Main page should show:
+
+1. Add Vehicle Form
+2. Search bar
+3. List of vehicle cards
+
+Each vehicle card should:
+
+- Show vehicleNumber + ownerName
+- Be expandable when clicked
+- When expanded show:
+   - model
+   - mileage
+   - fastagBalance
+   - lastServiceDate
+
+Inside expanded view include:
+- Edit button
+- Delete button
+- Recharge Fastag section:
+    - Input amount
+    - Recharge button
+    - Simulate QR scanner UI (just a box with "Scanner Activated" text)
+
+Recharge should call backend recharge API.
+
+========================================
+DATABASE
+========================================
+
+Provide PostgreSQL table creation SQL.
+
+Use environment variable:
+DATABASE_URL=
+
+Provide instructions in README:
+- How to setup .env
+- How to run backend
+- How to run frontend
+
+========================================
+PROJECT STRUCTURE
+========================================
+
+vehicle-registry/
+   backend/
+      server.js
+      routes/
+      controllers/
+      db.js
+   frontend/
+      src/
+         components/
+         App.jsx
+
+========================================
+EXTRA
+========================================
+
+- Use async/await
+- Clean code
+- Comments explaining logic
+- No TypeScript (use plain JavaScript)
+- Ensure it runs on Replit without extra configuration
