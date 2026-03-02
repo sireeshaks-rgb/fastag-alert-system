@@ -13,7 +13,8 @@ import {
   Gauge, 
   ChevronDown,
   Activity,
-  IndianRupee
+  IndianRupee,
+  Wrench
 } from "lucide-react";
 import {
   Collapsible,
@@ -44,6 +45,23 @@ import { cn } from "@/lib/utils";
 
 interface VehicleCardProps {
   vehicle: VehicleResponse;
+}
+
+// Helper function to check if service is due (more than 6 months)
+function isServiceDue(lastServiceDate: string): boolean {
+  const lastService = new Date(lastServiceDate);
+  const today = new Date();
+  const sixMonthsAgo = new Date(today.setMonth(today.getMonth() - 6));
+  return lastService < sixMonthsAgo;
+}
+
+// Get days since last service
+function daysSinceService(lastServiceDate: string): number {
+  const lastService = new Date(lastServiceDate);
+  const today = new Date();
+  const diffTime = today.getTime() - lastService.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
 }
 
 export function VehicleCard({ vehicle }: VehicleCardProps) {
@@ -136,6 +154,13 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
                     Active
                   </Badge>
                 )}
+
+                {isServiceDue(vehicle.lastServiceDate) && (
+                  <Badge variant="outline" className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider border-orange-400 text-orange-600 bg-orange-500/10 flex items-center gap-1.5 shadow-sm">
+                    <Wrench className="w-3.5 h-3.5" />
+                    Service Due
+                  </Badge>
+                )}
                 
                 <div className={cn(
                   "flex items-center gap-2 p-2 rounded-lg transition-transform duration-200",
@@ -170,6 +195,19 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
             </div>
           )}
 
+          {/* Service Due Warning Banner */}
+          {isServiceDue(vehicle.lastServiceDate) && (
+            <div className="mb-6 p-4 rounded-xl bg-orange-500/10 border border-orange-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Wrench className="w-5 h-5 text-orange-600 shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-orange-600">Vehicle service is due!</h4>
+                  <p className="text-sm text-orange-600/80 mt-1">Last serviced {daysSinceService(vehicle.lastServiceDate)} days ago. Please schedule a service appointment soon.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Vehicle Details */}
             <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -194,7 +232,16 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
                   <CalendarDays className="w-4 h-4" />
                   <span className="text-xs font-semibold uppercase tracking-wider">Last Service</span>
                 </div>
-                <p className="font-medium text-foreground">{vehicle.lastServiceDate}</p>
+                <div className="flex flex-col">
+                  <p className="font-medium text-foreground">{vehicle.lastServiceDate}</p>
+                  <p className={cn(
+                    "text-xs mt-1",
+                    isServiceDue(vehicle.lastServiceDate) ? "text-orange-600 font-semibold" : "text-muted-foreground"
+                  )}>
+                    {daysSinceService(vehicle.lastServiceDate)} days ago
+                    {isServiceDue(vehicle.lastServiceDate) && " (Service Due)"}
+                  </p>
+                </div>
               </div>
 
               {/* Action Buttons */}

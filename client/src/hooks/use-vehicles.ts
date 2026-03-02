@@ -2,31 +2,53 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl, type VehicleResponse } from "@shared/routes";
 import { type InsertVehicle } from "@shared/schema";
 import { z } from "zod";
+import { useAuth } from "./use-auth";
+
+function getAuthHeaders(token: string | null) {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+}
 
 // Fetch all vehicles
 export function useVehicles(search?: string) {
+  const { token, isLoading: authLoading } = useAuth();
+
   return useQuery({
-    queryKey: [api.vehicles.list.path, search],
+    queryKey: [api.vehicles.list.path, search, token],
     queryFn: async () => {
       const url = new URL(api.vehicles.list.path, window.location.origin);
       if (search) url.searchParams.append("search", search);
       
-      const res = await fetch(url.toString(), { credentials: "include" });
+      const res = await fetch(url.toString(), {
+        headers: getAuthHeaders(token),
+        credentials: "include"
+      });
       if (!res.ok) throw new Error("Failed to fetch vehicles");
       
       const data = await res.json();
       return api.vehicles.list.responses[200].parse(data);
     },
+    enabled: !authLoading, // Don't fetch until auth is loaded
   });
 }
 
 // Fetch single vehicle
 export function useVehicle(id: number) {
+  const { token } = useAuth();
+
   return useQuery({
-    queryKey: [api.vehicles.get.path, id],
+    queryKey: [api.vehicles.get.path, id, token],
     queryFn: async () => {
       const url = buildUrl(api.vehicles.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
+      const res = await fetch(url, {
+        headers: getAuthHeaders(token),
+        credentials: "include"
+      });
       
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch vehicle");
@@ -40,12 +62,13 @@ export function useVehicle(id: number) {
 // Create new vehicle
 export function useCreateVehicle() {
   const queryClient = useQueryClient();
+  const { token } = useAuth();
   
   return useMutation({
     mutationFn: async (data: InsertVehicle) => {
       const res = await fetch(api.vehicles.create.path, {
         method: api.vehicles.create.method,
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(token),
         body: JSON.stringify(data),
         credentials: "include",
       });
@@ -69,13 +92,14 @@ export function useCreateVehicle() {
 // Update vehicle
 export function useUpdateVehicle() {
   const queryClient = useQueryClient();
+  const { token } = useAuth();
   
   return useMutation({
     mutationFn: async ({ id, ...updates }: { id: number } & Partial<InsertVehicle>) => {
       const url = buildUrl(api.vehicles.update.path, { id });
       const res = await fetch(url, {
         method: api.vehicles.update.method,
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(token),
         body: JSON.stringify(updates),
         credentials: "include",
       });
@@ -100,12 +124,14 @@ export function useUpdateVehicle() {
 // Delete vehicle
 export function useDeleteVehicle() {
   const queryClient = useQueryClient();
+  const { token } = useAuth();
   
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.vehicles.delete.path, { id });
       const res = await fetch(url, {
         method: api.vehicles.delete.method,
+        headers: getAuthHeaders(token),
         credentials: "include",
       });
       
@@ -122,13 +148,14 @@ export function useDeleteVehicle() {
 // Recharge Fastag
 export function useRechargeFastag() {
   const queryClient = useQueryClient();
+  const { token } = useAuth();
   
   return useMutation({
     mutationFn: async ({ id, amount }: { id: number; amount: number }) => {
       const url = buildUrl(api.vehicles.recharge.path, { id });
       const res = await fetch(url, {
         method: api.vehicles.recharge.method,
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(token),
         body: JSON.stringify({ amount }),
         credentials: "include",
       });

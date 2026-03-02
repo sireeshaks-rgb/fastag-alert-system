@@ -1,0 +1,7 @@
+cd C:\Users\sireeshaks\Downloads\Fastag-Alert-System-1\Fastag-Alert-System-1
+
+$env:DATABASE_URL="postgresql://neondb_owner:npg_ODxH90kiwPZs@ep-wandering-tooth-aiexo9fa-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+
+$env:PORT="3001"
+
+npx tsx server/index.ts
