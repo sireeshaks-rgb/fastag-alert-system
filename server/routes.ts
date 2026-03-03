@@ -30,7 +30,7 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  
+
   // ==================== AUTH ROUTES ====================
   app.post(api.auth.login.path, async (req, res) => {
     try {

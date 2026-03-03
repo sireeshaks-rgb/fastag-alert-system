@@ -20,7 +20,8 @@ import {
   User,
   BarChart3,
   Users,
-  Wrench
+  Wrench,
+  Activity
 } from "lucide-react";
 import {
   Dialog,
@@ -74,30 +75,35 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen pb-20">
-      {/* Header with User Info */}
-      <div className="bg-white border-b border-border sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Header */}
+      <div className="bg-slate-800/50 backdrop-blur-md border-b border-purple-500/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <LayoutDashboard className="w-6 h-6 text-primary" />
-            <span className="text-xl font-bold">Fastag Alert System</span>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
+              <Car className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">FastTag Fleet</span>
+              <p className="text-xs text-gray-400">Smart Vehicle Management</p>
+            </div>
           </div>
           
           {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 border-white/30 text-white hover:bg-white/10 hover:text-white">
                   <User className="w-4 h-4" />
                   <span>{user.name}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-slate-800 border-purple-500/30">
                 <div className="px-2 py-1.5 text-sm">
-                  <p className="font-semibold">{user.email}</p>
-                  <p className="text-xs text-muted-foreground">{getRoleLabel(user.roleId)}</p>
+                  <p className="font-semibold text-white">{user.email}</p>
+                  <p className="text-xs text-gray-400">{getRoleLabel(user.roleId)}</p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
+                <DropdownMenuItem onClick={handleLogout} className="text-red-400 cursor-pointer">
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </DropdownMenuItem>
@@ -107,74 +113,95 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Premium Hero Section */}
-      <div className="relative bg-black dark:bg-zinc-950 text-white overflow-hidden pb-12 pt-16 sm:pt-24 px-4 sm:px-6 lg:px-8">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 inset-x-0 h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/4 w-[1000px] h-[1000px] rounded-full bg-primary/20 blur-[120px] mix-blend-screen opacity-50" />
-          <div className="absolute -bottom-1/2 -left-1/4 w-[800px] h-[800px] rounded-full bg-blue-600/20 blur-[100px] mix-blend-screen opacity-40" />
+      {/* Hero Section with Stats */}
+      <div className="relative overflow-hidden pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/2 -right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 text-sm font-medium">
-              <LayoutDashboard className="w-4 h-4 text-primary" />
-              <span>Fleet Management Portal</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display tracking-tight leading-tight">
-              Vehicle <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-primary">Registry</span> System
+        <div className="relative max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Fleet <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Dashboard</span>
             </h1>
-            <p className="mt-4 text-lg text-zinc-400 max-w-xl">
-              Manage your fleet, track mileage, and automate Fastag recharges from one centralized command center.
-            </p>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">Monitor your vehicles in real-time, track fastag balance, and manage maintenance</p>
           </div>
 
-          {/* Key Metrics Cards */}
-          <div className="flex gap-4 w-full md:w-auto">
-            <div className="glass-card flex-1 md:w-40 p-5 rounded-2xl border-white/10 text-white flex flex-col items-center justify-center">
-              <div className="p-3 bg-white/10 rounded-full mb-3">
-                <Car className="w-6 h-6 text-blue-400" />
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-purple-500/30 rounded-2xl p-6 hover:border-purple-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm font-semibold uppercase">Total Fleet</p>
+                  <p className="text-3xl font-bold text-white mt-2">{isLoading ? "-" : totalVehicles}</p>
+                </div>
+                <div className="p-3 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
+                  <Car className="w-6 h-6 text-purple-400" />
+                </div>
               </div>
-              <p className="text-3xl font-bold font-display">{isLoading ? "-" : totalVehicles}</p>
-              <p className="text-xs text-zinc-400 uppercase tracking-wider font-semibold mt-1">Total Fleet</p>
-            </div>
-            
-            <div className="glass-card flex-1 md:w-40 p-5 rounded-2xl border-destructive/30 bg-destructive/10 text-white flex flex-col items-center justify-center">
-              <div className="p-3 bg-destructive/20 rounded-full mb-3">
-                <AlertCircle className="w-6 h-6 text-destructive" />
-              </div>
-              <p className="text-3xl font-bold font-display text-destructive">{isLoading ? "-" : lowBalanceCount}</p>
-              <p className="text-xs text-zinc-400 uppercase tracking-wider font-semibold mt-1">Low Balance</p>
+              <div className="mt-4 h-1 bg-gradient-to-r from-purple-500 to-transparent rounded-full" />
             </div>
 
-            <div className="glass-card flex-1 md:w-40 p-5 rounded-2xl border-orange-500/30 bg-orange-500/10 text-white flex flex-col items-center justify-center">
-              <div className="p-3 bg-orange-500/20 rounded-full mb-3">
-                <Wrench className="w-6 h-6 text-orange-400" />
+            <div className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-red-500/30 rounded-2xl p-6 hover:border-red-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm font-semibold uppercase">Low Balance</p>
+                  <p className="text-3xl font-bold text-red-400 mt-2">{isLoading ? "-" : lowBalanceCount}</p>
+                </div>
+                <div className="p-3 bg-red-500/20 rounded-lg group-hover:bg-red-500/30 transition-colors">
+                  <AlertCircle className="w-6 h-6 text-red-400" />
+                </div>
               </div>
-              <p className="text-3xl font-bold font-display text-orange-400">{isLoading ? "-" : serviceDueCount}</p>
-              <p className="text-xs text-zinc-400 uppercase tracking-wider font-semibold mt-1">Service Due</p>
+              <div className="mt-4 h-1 bg-gradient-to-r from-red-500 to-transparent rounded-full" />
+            </div>
+
+            <div className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-orange-500/30 rounded-2xl p-6 hover:border-orange-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm font-semibold uppercase">Service Due</p>
+                  <p className="text-3xl font-bold text-orange-400 mt-2">{isLoading ? "-" : serviceDueCount}</p>
+                </div>
+                <div className="p-3 bg-orange-500/20 rounded-lg group-hover:bg-orange-500/30 transition-colors">
+                  <Wrench className="w-6 h-6 text-orange-400" />
+                </div>
+              </div>
+              <div className="mt-4 h-1 bg-gradient-to-r from-orange-500 to-transparent rounded-full" />
+            </div>
+
+            <div className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-green-500/30 rounded-2xl p-6 hover:border-green-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm font-semibold uppercase">Active Status</p>
+                  <p className="text-3xl font-bold text-green-400 mt-2">{isLoading ? "-" : totalVehicles - lowBalanceCount}</p>
+                </div>
+                <div className="p-3 bg-green-500/20 rounded-lg group-hover:bg-green-500/30 transition-colors">
+                  <Activity className="w-6 h-6 text-green-400" />
+                </div>
+              </div>
+              <div className="mt-4 h-1 bg-gradient-to-r from-green-500 to-transparent rounded-full" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+      {/* Main Content */}
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* Search and Add Vehicle - Only show on vehicles tab */}
         {activeTab === "vehicles" && (
-          <div className="bg-card rounded-2xl p-4 shadow-xl border border-border/50 flex flex-col sm:flex-row items-center gap-4 mb-8">
+          <div className="bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-md rounded-2xl p-6 border border-purple-500/20 flex flex-col sm:flex-row items-center gap-4 mb-8">
             <div className="relative flex-1 w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />
               <Input 
-                placeholder="Search by vehicle number, model, or owner..." 
-                className="pl-11 pr-4 py-6 text-base bg-muted/50 border-transparent focus:bg-background rounded-xl w-full"
+                placeholder="Search vehicles..." 
+                className="pl-12 pr-4 py-3 bg-slate-900/50 border-purple-500/30 text-white placeholder:text-gray-500 focus:border-purple-500 focus:bg-slate-900 rounded-xl w-full"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Button 
               size="lg" 
-              className="w-full sm:w-auto py-6 px-8 rounded-xl shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all"
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg shadow-purple-500/30 rounded-xl"
               onClick={() => setIsAddDialogOpen(true)}
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -185,19 +212,19 @@ export default function Home() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full gap-0" style={{ gridTemplateColumns: `repeat(${(user?.roleId === 1 ? 3 : user?.roleId === 2 ? 2 : 1)}, 1fr)` }}>
-            <TabsTrigger value="vehicles" className="gap-2">
+          <TabsList className="grid w-full gap-0 bg-slate-800/50 border border-purple-500/20 rounded-xl p-1" style={{ gridTemplateColumns: `repeat(${(user?.roleId === 1 ? 3 : user?.roleId === 2 ? 2 : 1)}, 1fr)` }}>
+            <TabsTrigger value="vehicles" className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white gap-2">
               <Car className="w-4 h-4" />
               <span className="hidden sm:inline">Vehicles</span>
             </TabsTrigger>
             {(user?.roleId === 1 || user?.roleId === 2) && (
-              <TabsTrigger value="logs" className="gap-2">
+              <TabsTrigger value="logs" className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white gap-2">
                 <BarChart3 className="w-4 h-4" />
                 <span className="hidden sm:inline">Audit Logs</span>
               </TabsTrigger>
             )}
             {user?.roleId === 1 && (
-              <TabsTrigger value="users" className="gap-2">
+              <TabsTrigger value="users" className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white gap-2">
                 <Users className="w-4 h-4" />
                 <span className="hidden sm:inline">Users</span>
               </TabsTrigger>
@@ -207,41 +234,42 @@ export default function Home() {
           {/* Vehicles Tab */}
           <TabsContent value="vehicles" className="mt-8">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold font-display">Registered Vehicles</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-white">Your Fleet</h2>
+                <span className="text-sm text-gray-400">{vehicles?.length || 0} vehicles</span>
+              </div>
               {isLoading ? (
-                Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="bg-card border rounded-2xl p-5 flex flex-col sm:flex-row justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <Skeleton className="w-12 h-12 rounded-xl" />
-                      <div className="space-y-2">
-                        <Skeleton className="h-6 w-32" />
-                        <Skeleton className="h-4 w-48" />
-                      </div>
+                <div className="grid grid-cols-1 gap-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="bg-slate-800/50 border border-purple-500/20 rounded-2xl p-5 animate-pulse">
+                      <div className="h-6 bg-slate-700 rounded w-1/3 mb-4" />
+                      <div className="h-4 bg-slate-700 rounded w-2/3" />
                     </div>
-                    <Skeleton className="h-8 w-24 rounded-full" />
-                  </div>
-                ))
+                  ))}
+                </div>
               ) : vehicles?.length === 0 ? (
-                <div className="text-center py-20 px-4 rounded-3xl border-2 border-dashed border-border bg-muted/10">
-                  <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Car className="w-8 h-8 text-muted-foreground" />
+                <div className="text-center py-20 px-4 rounded-3xl border-2 border-dashed border-purple-500/30 bg-slate-800/20">
+                  <div className="bg-purple-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Car className="w-8 h-8 text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">No vehicles found</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                  <h3 className="text-xl font-bold text-white mb-2">No vehicles found</h3>
+                  <p className="text-gray-400 max-w-md mx-auto mb-6">
                     {searchTerm 
                       ? `No results for "${searchTerm}". Try a different search term.` 
-                      : "Your registry is empty. Add your first vehicle to start tracking."}
+                      : "Your fleet is empty. Add your first vehicle to start tracking."}
                   </p>
                   {searchTerm && (
-                    <Button variant="outline" onClick={() => setSearchTerm("")}>
+                    <Button variant="outline" onClick={() => setSearchTerm("")} className="border-purple-500/30">
                       Clear Search
                     </Button>
                   )}
                 </div>
               ) : (
-                vehicles?.map(vehicle => (
-                  <VehicleCard key={vehicle.id} vehicle={vehicle} />
-                ))
+                <div className="grid grid-cols-1 gap-4">
+                  {vehicles?.map(vehicle => (
+                    <VehicleCard key={vehicle.id} vehicle={vehicle} />
+                  ))}
+                </div>
               )}
             </div>
           </TabsContent>

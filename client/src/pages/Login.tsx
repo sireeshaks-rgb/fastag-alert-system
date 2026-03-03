@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/hooks/use-auth';
 
@@ -39,6 +38,7 @@ export function LoginPage() {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       console.error('[LoginPage] Login error:', errorMessage, err);
       setError(errorMessage);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -58,29 +58,33 @@ export function LoginPage() {
       const errorMessage = err instanceof Error ? err.message : 'Registration failed';
       console.error('[LoginPage] Register error:', errorMessage);
       setError(errorMessage);
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Fastag Alert System</CardTitle>
-          <CardDescription>
-            {showRegister ? 'Create a new account' : 'Sign in to your account'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+      <div className="w-full max-w-md bg-gradient-to-br from-slate-800 to-slate-900 border border-purple-500/30 rounded-2xl shadow-2xl">
+        <div className="p-8">
+          <div className="space-y-1 mb-8">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              Fastag Alert System
+            </h1>
+            <p className="text-gray-400 text-sm">
+              {showRegister ? 'Create a new account' : 'Sign in to your account'}
+            </p>
+          </div>
+
           {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertDescription>{error}</AlertDescription>
+            <Alert variant="destructive" className="mb-4 bg-red-500/20 border-red-500/30">
+              <AlertDescription className="text-red-300">{error}</AlertDescription>
             </Alert>
           )}
 
           {isLoading && (
-            <Alert className="mb-4 bg-blue-50 border-blue-200">
-              <AlertDescription className="text-blue-800">
+            <Alert className="mb-4 bg-blue-500/20 border-blue-500/30">
+              <AlertDescription className="text-blue-300">
                 {showRegister ? 'Creating account...' : 'Logging in...'}
               </AlertDescription>
             </Alert>
@@ -89,19 +93,20 @@ export function LoginPage() {
           <form onSubmit={showRegister ? handleRegister : handleLogin} className="space-y-4">
             {showRegister && (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Name</label>
+                <label className="text-sm font-medium text-gray-300">Name</label>
                 <Input
                   placeholder="Your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={isLoading}
                   required
+                  className="bg-slate-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Email</label>
+              <label className="text-sm font-medium text-gray-300">Email</label>
               <Input
                 type="email"
                 placeholder="Enter your email"
@@ -109,11 +114,12 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 required
+                className="bg-slate-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Password</label>
+              <label className="text-sm font-medium text-gray-300">Password</label>
               <Input
                 type="password"
                 placeholder="Enter your password"
@@ -121,10 +127,15 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
                 required
+                className="bg-slate-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-2" 
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
@@ -136,8 +147,8 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
-            <span className="text-gray-600">
+          <div className="mt-6 text-center text-sm">
+            <span className="text-gray-400">
               {showRegister ? 'Already have an account? ' : "Don't have an account? "}
             </span>
             <button
@@ -149,21 +160,23 @@ export function LoginPage() {
                 setName('');
               }}
               disabled={isLoading}
-              className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+              className="text-purple-400 hover:text-purple-300 font-medium disabled:opacity-50 transition-colors"
             >
               {showRegister ? 'Sign In' : 'Register'}
             </button>
           </div>
 
           {!showRegister && (
-            <div className="mt-6 p-4 bg-gray-50 rounded text-xs text-gray-600 space-y-1">
-              <p className="font-semibold">Demo Credentials:</p>
-              <p>Admin: admin@fastag.com / admin123</p>
-              <p>Manager: manager@fastag.com / manager123</p>
+            <div className="mt-6 p-4 bg-slate-700/30 border border-purple-500/20 rounded-lg text-xs text-gray-300 space-y-2">
+              <p className="font-semibold text-purple-300">Demo Credentials:</p>
+              <div className="space-y-1 text-gray-400">
+                <p>🔐 Admin: <span className="text-purple-300">admin@fastag.com</span> / <span className="text-purple-300">admin123</span></p>
+                <p>🔐 Manager: <span className="text-purple-300">manager@fastag.com</span> / <span className="text-purple-300">manager123</span></p>
+              </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

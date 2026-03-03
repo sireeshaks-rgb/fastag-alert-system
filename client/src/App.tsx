@@ -1,5 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
-import { useEffect } from "react";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,14 +11,6 @@ import { useAuth } from "@/hooks/use-auth";
 
 function Router() {
   const { user, isLoading } = useAuth();
-  const [location, navigate] = useLocation();
-
-  // Redirect to login if not authenticated and trying to access home
-  useEffect(() => {
-    if (!isLoading && !user && location === '/') {
-      navigate('/login');
-    }
-  }, [user, isLoading, location, navigate]);
 
   if (isLoading) {
     return (
@@ -31,8 +22,6 @@ function Router() {
       </div>
     );
   }
-
-  console.log('[Router] Rendering - user:', user ? user.email : 'null');
 
   return (
     <Switch>
